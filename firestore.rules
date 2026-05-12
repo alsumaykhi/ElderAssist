@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc(uid) {
+      return get(/databases/$(database)/documents/users/$(uid));
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function caregiverHasSenior(caregiverUid, seniorUid) {
+      return 'seniorIds' in userDoc(caregiverUid).data &&
+             userDoc(caregiverUid).data.seniorIds.hasAny([seniorUid]);
+    }
+
+    function seniorLinkedToCaregiver(seniorUid, caregiverUid) {
+      return 'caregiverId' in userDoc(seniorUid).data &&
+             userDoc(seniorUid).data.caregiverId == caregiverUid;
+    }
+
+    function linkedPair(caregiverUid, seniorUid) {
+      return signedIn() &&
+             caregiverHasSenior(caregiverUid, seniorUid) &&
+             seniorLinkedToCaregiver(seniorUid, caregiverUid);
+    }
+
+    match /users/{userId} {
+
+      // User can fully manage their own document
+      allow read, write: if isSelf(userId);
+
+      // Caregiver can read senior documents if linked
+      allow read: if signedIn()
+                  && request.auth.uid != userId
+                  && (
+                    caregiverHasSenior(request.auth.uid, userId) ||
+                    seniorLinkedToCaregiver(request.auth.uid, userId)
+                  );
+
+      // Linking: a signed-in user may add only themselves to another user's seniorIds, and only that field may change
+      allow update: if signedIn()
+                    && request.auth.uid != userId
+                    && resource.data.diff(request.resource.data).changedKeys().hasOnly(['seniorIds'])
+                    && request.auth.uid in request.resource.data.seniorIds
+                    && (!('seniorIds' in resource.data)
+                        || !(request.auth.uid in resource.data.seniorIds));
+
+      match /medications/{medId} {
+        allow read, write: if isSelf(userId);
+
+        // Caregiver can read senior medications if linked
+        allow read: if signedIn()
+                    && caregiverHasSenior(request.auth.uid, userId);
+      }
+
+      // Dose logs under each medication
+      match /medications/{medId}/doseLogs/{doseLogId} {
+        // Senior can manage their own dose logs
+        allow read, write: if isSelf(userId);
+
+        // Caregiver can read senior dose logs if linked
+        allow read: if signedIn()
+                    && caregiverHasSenior(request.auth.uid, userId);
+      }
+
+      match /checkIns/{checkInId} {
+        allow read, write: if isSelf(userId);
+
+        // Caregiver can read senior check-ins if linked
+        allow read: if signedIn()
+                    && caregiverHasSenior(request.auth.uid, userId);
+      }
+
+      // Health assistant chat
+      // Client can read and delete own messages.
+      // Cloud Function writes with Admin SDK (bypasses rules).
+      match /chatHistory/{messageId} {
+        // Senior can read and delete their own chat history
+        allow read, delete: if isSelf(userId);
+
+        // Caregiver can read linked senior chat history
+        allow read: if signedIn()
+                    && caregiverHasSenior(request.auth.uid, userId);
+      }
+    }
+
+    match /caregiver_senior_chats/{chatId} {
+      allow read: if signedIn() &&
+                  request.auth.uid in resource.data.participants;
+
+      allow create: if signedIn() &&
+                    request.auth.uid in request.resource.data.participants &&
+                    request.resource.data.participants.size() == 2 &&
+                    linkedPair(
+                      request.resource.data.caregiverId,
+                      request.resource.data.seniorId,
+                    );
+
+      allow update: if signedIn() &&
+                    request.auth.uid in resource.data.participants;
+
+      match /messages/{messageId} {
+        allow read: if signedIn() &&
+                    request.auth.uid in get(/databases/$(database)/documents/caregiver_senior_chats/$(chatId)).data.participants;
+
+        allow create: if signedIn() &&
+                      request.auth.uid in get(/databases/$(database)/documents/caregiver_senior_chats/$(chatId)).data.participants &&
+                      request.resource.data.senderId == request.auth.uid;
+
+        allow update: if signedIn() &&
+                      request.auth.uid in get(/databases/$(database)/documents/caregiver_senior_chats/$(chatId)).data.participants;
+      }
+    }
+
+    match /linkCodes/{code} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+                    && request.resource.data.caregiverId == request.auth.uid
+                    && request.resource.data.code == code
+                    && request.resource.data.isUsed == false;
+
+      allow update: if signedIn()
+                    && resource.data.isUsed == false
+                    && request.resource.data.isUsed == true
+                    && request.resource.data.usedBy == request.auth.uid
+                    && request.resource.data.caregiverId == resource.data.caregiverId
+                    && request.resource.data.code == resource.data.code;
+    }
+  }
+}

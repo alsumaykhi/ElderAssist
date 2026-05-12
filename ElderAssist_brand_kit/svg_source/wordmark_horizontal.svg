@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" width="700" height="200">
+  <!-- Symbol -->
+  <g transform="translate(20, 20) scale(0.8)">
+    <circle cx="76" cy="100" r="44" fill="none" stroke="#3F7D5C" stroke-width="8"/>
+    <circle cx="124" cy="100" r="44" fill="none" stroke="#3F7D5C" stroke-width="8"/>
+    <path d="M 100 122 C 100 122, 82 110, 82 96 C 82 88, 88 83, 93 83 C 96 83, 100 86, 100 90 C 100 86, 104 83, 107 83 C 112 83, 118 88, 118 96 C 118 110, 100 122, 100 122 Z" fill="#E87B5A"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="200" y="118"
+        font-family="Fraunces, 'Times New Roman', serif"
+        font-size="58"
+        font-weight="500"
+        fill="#1A2B22"
+        letter-spacing="-1.5">
+    <tspan font-weight="600">Elder</tspan><tspan fill="#3F7D5C" font-weight="500">Assist</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="202" y="148"
+        font-family="Inter, -apple-system, sans-serif"
+        font-size="14"
+        fill="#5F6B62"
+        letter-spacing="3"
+        text-transform="uppercase">SIMPLE SUPPORT FOR SENIORS</text>
+</svg>

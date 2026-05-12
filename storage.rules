@@ -1,0 +1,23 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function chatDoc(chatId) {
+      return firestore.get(
+        /databases/(default)/documents/caregiver_senior_chats/$(chatId)
+      );
+    }
+
+    function isParticipant(chatId) {
+      return signedIn() &&
+             request.auth.uid in chatDoc(chatId).data.participants;
+    }
+
+    match /chat_media/{chatId}/{messageId}/{fileName} {
+      allow read, write: if isParticipant(chatId);
+    }
+  }
+}

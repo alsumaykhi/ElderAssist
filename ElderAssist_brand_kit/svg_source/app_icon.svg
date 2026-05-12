@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="iconBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4A8E6B"/>
+      <stop offset="1" stop-color="#2C5942"/>
+    </linearGradient>
+  </defs>
+  <!-- iOS-style squircle -->
+  <path d="M 512 20
+           C 845 20, 1004 179, 1004 512
+           C 1004 845, 845 1004, 512 1004
+           C 179 1004, 20 845, 20 512
+           C 20 179, 179 20, 512 20 Z"
+        fill="url(#iconBg)"/>
+
+  <!-- Two circles, scaled up to 1024 grid -->
+  <circle cx="389" cy="512" r="225" fill="none" stroke="white" stroke-width="38"/>
+  <circle cx="635" cy="512" r="225" fill="none" stroke="white" stroke-width="38"/>
+
+  <!-- Heart in overlap, scaled to 1024 -->
+  <path d="M 512 625
+           C 512 625, 420 564, 420 492
+           C 420 451, 451 425, 477 425
+           C 492 425, 512 440, 512 461
+           C 512 440, 532 425, 547 425
+           C 573 425, 604 451, 604 492
+           C 604 564, 512 625, 512 625 Z"
+        fill="#E87B5A"/>
+</svg>

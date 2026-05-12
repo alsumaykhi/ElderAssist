@@ -29,15 +29,31 @@ ElderAssist is a Flutter application for elder care workflows: authentication, c
    flutter pub get
    ```
 
-3. **Firebase / FlutterFire (required for a runnable app)**  
-   This repository intentionally does **not** commit `lib/firebase_options.dart`, `android/app/google-services.json`, or `ios/Runner/GoogleService-Info.plist`. Generate them for your Firebase project:
+3. **Firebase client config (required for a runnable app)**  
+   This repository does **not** commit `lib/firebase_options.dart`, `android/app/google-services.json`, or `ios/Runner/GoogleService-Info.plist`. Use one of the following.
+
+   **Option A (recommended): FlutterFire CLI**  
+   Ask the project owner to invite you to the Firebase project, then run:
 
    ```bash
    dart pub global activate flutterfire_cli
    flutterfire configure
    ```
 
-   Follow the CLI prompts and select your Firebase apps (Android / iOS / web as applicable). That recreates `firebase_options.dart` and the platform config files locally.
+   Follow the prompts and select the Android / iOS (and web, if used) apps. That generates `firebase_options.dart` and the platform config files locally.
+
+   **Option B (manual handoff from the project owner)**  
+   The owner sends these files over a **private** channel (not in a public GitHub issue). Place them at **exact** paths inside the clone:
+
+   | File | Path in the repo |
+   |------|------------------|
+   | `firebase_options.dart` | `lib/firebase_options.dart` |
+   | `google-services.json` | `android/app/google-services.json` |
+   | `GoogleService-Info.plist` | `ios/Runner/GoogleService-Info.plist` *(only if building iOS)* |
+
+   Then run `flutter pub get` and `flutter run`. **Do not commit** these files; they stay local and are listed in `.gitignore`.
+
+   If the owner changes Firebase app registration, Android `applicationId`, iOS bundle ID, or switches Firebase project, **send updated files** (or use Option A and run `flutterfire configure` again). Otherwise the app can fail at runtime or point at the wrong project.
 
 4. **Run the app**
 
@@ -54,6 +70,10 @@ ElderAssist is a Flutter application for elder care workflows: authentication, c
    ```
 
    Use `npm run serve` with the Firebase emulator or deploy with your own Firebase project configuration (not committed: `.firebaserc`, service account JSONs).
+
+## Firebase CLI deploy vs local client files
+
+Running `firebase deploy` (Functions, Firestore rules, indexes, Hosting, etc.) updates **cloud resources** for the linked Firebase project. It does **not** update `firebase_options.dart`, `google-services.json`, or `GoogleService-Info.plist` on anyone’s machine. Collaborators using **Option B** keep the same handoff files until the owner changes client-side Firebase setup or sends replacements; backend-only deploys usually do not require new handoff files.
 
 ## Security notes
 

@@ -26,8 +26,21 @@ This is the working repository for the project. The full report, including the s
 
 ### Demo video
 
+### Demo video
+
 <p align="center">
- <iframe width="560" height="315" src="https://www.youtube.com/embed/9bs-8XNaNOc?si=IfXqlo6xrx1uCAp5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <a href="https://www.youtube.com/watch?v=9bs-8XNaNOc" target="_blank">
+    <img 
+      src="https://img.youtube.com/vi/9bs-8XNaNOc/maxresdefault.jpg" 
+      alt="Watch the ElderAssist demo video" 
+      width="640">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=9bs-8XNaNOc">
+    Watch the ElderAssist Demo Video
+  </a>
 </p>
 
 ### Brand reference

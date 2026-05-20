@@ -24,6 +24,16 @@ Together, we designed and built ElderAssist, a Flutter mobile application that s
 
 This is the working repository for the project. The full report, including the system analysis, design diagrams, implementation walkthrough, and testing results, lives in **`docs/`** (add the PDF and diagrams there for grading or archival).
 
+### Demo video
+
+<p align="center">
+  <a href="https://youtu.be/9bs-8XNaNOc" title="ElderAssist demo on YouTube">
+    <img src="https://img.youtube.com/vi/9bs-8XNaNOc/hqdefault.jpg" alt="ElderAssist demo video — play on YouTube" width="640">
+  </a>
+  <br>
+  <a href="https://youtu.be/9bs-8XNaNOc"><strong>Watch the ElderAssist demo (YouTube)</strong></a>
+</p>
+
 ### Brand reference
 
 <p align="center">

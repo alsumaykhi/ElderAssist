@@ -29,7 +29,7 @@ This is the working repository for the project. The full report, including the s
 ### Demo video
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=9bs-8XNaNOc" target="_blank">
+  <a href="https://youtu.be/tDDZLTZ9RHU" target="_blank">
     <img 
       src="https://img.youtube.com/vi/9bs-8XNaNOc/maxresdefault.jpg" 
       alt="Watch the ElderAssist demo video" 
